@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 class Album
 {
     /** @var int|null Het ID interger van de album */
@@ -154,5 +155,30 @@ class Album
         $this->Afbeelding = $Afbeelding;
         $this->Prijs = $Prijs;
     }
-}
 
+    public static function getAll(PDO $db): array
+    {
+        // Voorbereiden van de query
+        $stmt = $db->query("SELECT * FROM album");
+
+        // Array om personen op te slaan
+        $albums = [];
+
+        // Itereren over de resultaten en personen toevoegen aan de array
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $album = new album(
+                $row['ID'],
+                $row['Naam'],
+                $row['Artiesten'],
+                $row['Release_datum'],
+                $row['URL'],
+                $row['Afbeelding'],
+                $row['Prijs']
+            );
+            $albums[] = $album;
+        }
+
+        // Retourneer array met personen
+        return $albums;
+    }
+}
