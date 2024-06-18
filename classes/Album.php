@@ -166,7 +166,7 @@ class Album
 
         // Itereren over de resultaten en personen toevoegen aan de array
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $album = new album(
+            $album = new Album(
                 $row['ID'],
                 $row['Naam'],
                 $row['Artiesten'],
@@ -180,5 +180,18 @@ class Album
 
         // Retourneer array met personen
         return $albums;
+    }
+
+    public function save(PDO $db): void
+    {
+        // Voorbereiden van de query
+        $stmt = $db->prepare("INSERT INTO album (Naam, Artiesten, Release_datum, URL, Afbeelding, Prijs) VALUES (:Naam, :Artiesten, :Release_datum, :URL, :Afbeelding, :Prijs)");
+        $stmt->bindParam(':Naam', $this->Naam);
+        $stmt->bindParam(':Artiesten', $this->Artiesten);
+        $stmt->bindParam(':Release_datum', $this->Release_datum);
+        $stmt->bindParam(':URL', $this->URL);
+        $stmt->bindParam(':Afbeelding', $this->Afbeelding);
+        $stmt->bindParam(':Prijs', $this->Prijs);
+        $stmt->execute();
     }
 }
